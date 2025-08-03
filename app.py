@@ -97,16 +97,21 @@ st.subheader("Unsupervised Clustering Mode")
 if st.button("Run Clustering"):
     if st.session_state.training_data:
         X = [f for f, _ in st.session_state.training_data]
-        kmeans = KMeans(n_clusters=2, random_state=0).fit(X)
-        st.write("Cluster Assignments:", kmeans.labels_)
         
-        # PCA for visualization
-        pca = PCA(n_components=2)
-        reduced = pca.fit_transform(X)
-        plt.figure()
-        plt.scatter(reduced[:,0], reduced[:,1], c=kmeans.labels_, cmap='rainbow')
-        plt.title("Feature Space Clustering")
-        st.pyplot(plt)
+        if len(X) < 2:
+            st.warning("⚠️ Need at least 2 samples to perform clustering.")
+        else:
+            n_clusters = min(2, len(X))  # Auto adjust cluster count
+            kmeans = KMeans(n_clusters=n_clusters, random_state=0).fit(X)
+            st.write("Cluster Assignments:", kmeans.labels_)
+            
+            # PCA for visualization
+            pca = PCA(n_components=2)
+            reduced = pca.fit_transform(X)
+            plt.figure()
+            plt.scatter(reduced[:,0], reduced[:,1], c=kmeans.labels_, cmap='rainbow')
+            plt.title("Feature Space Clustering")
+            st.pyplot(plt)
     else:
         st.warning("No samples to cluster. Please add some first.")
 
