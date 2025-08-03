@@ -1,0 +1,1 @@
+# Real-Time-Pattern-Recognition-Without-Datasets
